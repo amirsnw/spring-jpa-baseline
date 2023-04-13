@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Influencer")
+@Table(name="influencer")
 public class Influencer {
 
 	@Id
@@ -32,7 +32,7 @@ public class Influencer {
 	@Column(name="channel")
 	private String channel;
 	
-	@OneToMany(mappedBy="Influencer",
+	@OneToMany(mappedBy="influencer",
 			   cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 						 CascadeType.DETACH, CascadeType.REFRESH})
 	private List<Follower> followers;
@@ -88,7 +88,7 @@ public class Influencer {
 
 	// add convenience methods for bi-directional relationship
 	
-	public void add(Follower follower) {
+	public void addFollower(Follower follower) {
 		
 		if (follower == null) {
 			followers = new ArrayList<>();
@@ -96,7 +96,7 @@ public class Influencer {
 
 		followers.add(follower);
 
-		follower.setInstructor(this);
+		follower.setInfluencer(this);
 	}
 	
 }

@@ -19,16 +19,13 @@ CREATE table student (
 
 ALTER TABLE student ADD (
   CONSTRAINT stu_pk PRIMARY KEY (id));
-  
-ALTER TABLE departments ADD (
-  CONSTRAINT dept_pk PRIMARY KEY (ID));
 
 CREATE OR REPLACE TRIGGER stu_trg 
 BEFORE INSERT ON student 
 FOR EACH ROW
 
 BEGIN
-  SELECT stu_pk.NEXTVAL
+  SELECT stu_seq.NEXTVAL
   INTO   :new.id
   FROM   dual;
 END;
