@@ -1,11 +1,11 @@
-package com.hibernate.demo;
+package com.hibernate.dao.simple.school;
 
-import com.hibernate.demo.entity.Student;
+import com.hibernate.entity.simple.school.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ReadStudentDemo {
+public class ReadStudent {
 
 	public static void main(String[] args) {
 
@@ -21,7 +21,8 @@ public class ReadStudentDemo {
 		try {			
 			// create a student object
 			System.out.println("Creating new student object...");
-			Student tempStudent = new Student("Daffy", "Duck", "daffy@luv2code.com");
+			Student tempStudent = new Student("Sunny", "Manson", "sunny@gmail.com");
+			// Returns null if doesn't find any student
 			
 			// start a transaction
 			session.beginTransaction();

@@ -1,17 +1,17 @@
-package com.hibernate.demo;
+package com.hibernate.dao.simple.school;
 
-import com.hibernate.demo.entity.Student;
+import com.hibernate.entity.simple.school.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateStudentDemo {
+public class CreateStudent {
 
 	public static void main(String[] args) {
 
 		// create session factory
 		SessionFactory factory = new Configuration()
-								.configure("hibernate.cfg.xml")
+								.configure("hibernate.cfg.xml") // This is the default file that hibernate search for.
 								.addAnnotatedClass(Student.class)
 								.buildSessionFactory();
 		
@@ -21,7 +21,7 @@ public class CreateStudentDemo {
 		try {			
 			// create a student object
 			System.out.println("Creating new student object...");
-			Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+			Student tempStudent = new Student("Amy", "Winehouse", "amy@gmail.com");
 			
 			// start a transaction
 			session.beginTransaction();

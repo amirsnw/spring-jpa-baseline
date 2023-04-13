@@ -1,13 +1,13 @@
-package com.hibernate.demo;
+package com.hibernate.dao.simple.school;
 
 import java.util.List;
 
-import com.hibernate.demo.entity.Student;
+import com.hibernate.entity.simple.school.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class QueryStudentDemo {
+public class QueryStudent {
 
 	public static void main(String[] args) {
 
@@ -31,19 +31,19 @@ public class QueryStudentDemo {
 			// display the students
 			displayStudents(theStudents);
 			
-			// query students: lastName='Doe'
-			theStudents = session.createQuery("from Student s where s.lastName='Doe'").getResultList();
+			// query students: lastName='Dolls'
+			theStudents = session.createQuery("from Student s where s.lastName='Dolls'").getResultList();
 			
 			// display the students
 			System.out.println("\n\nStudents who have last name of Doe");
 			displayStudents(theStudents);
 			
-			// query students: lastName='Doe' OR firstName='Daffy'
+			// query students: lastName='Dolls' OR firstName='Daff'
 			theStudents =
 					session.createQuery("from Student s where"
-							+ " s.lastName='Doe' OR s.firstName='Daffy'").getResultList();
+							+ " s.lastName='Dolls' OR s.firstName='Daff'").getResultList();
 			
-			System.out.println("\n\nStudents who have last name of Doe OR first name Daffy");
+			System.out.println("\n\nStudents who have last name of Dolls OR first name Daff");
 			displayStudents(theStudents);
 			
 			// query students where email LIKE '%gmail.com'
