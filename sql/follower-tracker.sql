@@ -23,7 +23,7 @@ BEFORE INSERT ON follower
 FOR EACH ROW
 
 BEGIN
-  SELECT flw_seq.NEXTVAL
+  SELECT flw_pk.NEXTVAL
   INTO   :new.id
   FROM   dual;
 END;

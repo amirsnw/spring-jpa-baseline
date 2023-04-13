@@ -21,12 +21,12 @@ public class CreateFollowers {
 		Session session = factory.getCurrentSession();
 		
 		try {			
-			
+
 			// start a transaction
 			session.beginTransaction();
 			
 			// get the influencer from db
-			int theId = 1;
+			int theId = 67;
 			Influencer tempInfluencer = session.get(Influencer.class, theId);		
 			
 			// create some followers

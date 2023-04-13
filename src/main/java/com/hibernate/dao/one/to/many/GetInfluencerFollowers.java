@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class GetInfluencerFollowersDemo {
+public class GetInfluencerFollowers {
 
 	public static void main(String[] args) {
 
@@ -26,7 +26,7 @@ public class GetInfluencerFollowersDemo {
 			session.beginTransaction();
 			
 			// get the influencer from db
-			int theId = 1;
+			int theId = 67;
 			Influencer tempInfluencer = session.get(Influencer.class, theId);		
 			
 			System.out.println("Influencer: " + tempInfluencer);

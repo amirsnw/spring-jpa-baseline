@@ -19,7 +19,7 @@ public class DeleteStudent {
 		Session session = factory.getCurrentSession();
 		
 		try {								
-			int studentId = 1;
+			int studentId = 7;
 			
 			// now get a new session and start transaction
 			session = factory.getCurrentSession();

@@ -24,7 +24,7 @@ BEFORE INSERT ON influencer
 FOR EACH ROW
 
 BEGIN
-  SELECT inf_pk.NEXTVAL
+  SELECT inf_seq.NEXTVAL
   INTO   :new.id
   FROM   dual;
 END;
