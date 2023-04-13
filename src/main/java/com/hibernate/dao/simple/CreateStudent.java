@@ -1,6 +1,6 @@
-package com.hibernate.dao.simple.school;
+package com.hibernate.dao.simple;
 
-import com.hibernate.entity.simple.school.Student;
+import com.hibernate.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

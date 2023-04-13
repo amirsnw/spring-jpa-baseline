@@ -1,13 +1,12 @@
-package com.hibernate.dao.one.to.one.bi.office;
+package com.hibernate.dao.one.to.one.bi;
 
-
-import com.hibernate.entity.one.to.one.bi.office.Manager;
-import com.hibernate.entity.one.to.one.bi.office.ManagerInfo;
+import com.hibernate.entity.Manager;
+import com.hibernate.entity.ManagerInfo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class GetManagerInfo {
+public class CreateManager {
 
 	public static void main(String[] args) {
 
@@ -23,33 +22,35 @@ public class GetManagerInfo {
 		
 		try {			
 			
+			// create the objects
+			Manager tempManager =
+					new Manager("Amir", "Khalighi", "amirsnw@gmail.com");
+			
+			ManagerInfo tempManagerInfo =
+					new ManagerInfo(
+							"https://www.linkedin.com/in/amirsnw",
+							"Software Engineer");
+			
+			// associate the objects
+			tempManager.setManagerInfo(tempManagerInfo);
+			
 			// start a transaction
 			session.beginTransaction();
-
-			// get the manager info object
-			int theId = 2999;
-			ManagerInfo tempManagerInfo =
-					session.get(ManagerInfo.class, theId);
 			
-			// print the manager info
-			System.out.println("tempManagerInfo: " + tempManagerInfo);
-						
-			// print the associated manager
-			System.out.println("the associated manager: " +
-								tempManagerInfo.getManager());
+			// save the manager
+			//
+			// Note: this will ALSO save the infos object
+			// because of CascadeType.ALL
+			//
+			System.out.println("Saving manager: " + tempManager);
+			session.save(tempManager);					
 			
 			// commit transaction
 			session.getTransaction().commit();
 			
 			System.out.println("Done!");
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
 		finally {
-			// handle connection leak issue
-			session.close();
-			
 			factory.close();
 		}
 	}
