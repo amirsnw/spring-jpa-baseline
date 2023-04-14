@@ -1,12 +1,12 @@
-package com.hibernate.dao.one.to.one.bi;
+package com.hibernate.dao.one.to.one.uni;
 
 import com.hibernate.entity.one.to.one.Manager;
-import com.hibernate.entity.one.to.one.ManagerInfo;
+import com.hibernate.entity.one.to.one.Team;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateManager {
+public class CreateDemo {
 
 	public static void main(String[] args) {
 
@@ -14,7 +14,7 @@ public class CreateManager {
 		SessionFactory factory = new Configuration()
 								.configure("hibernate.cfg.xml")
 								.addAnnotatedClass(Manager.class)
-								.addAnnotatedClass(ManagerInfo.class)
+								.addAnnotatedClass(Team.class)
 								.buildSessionFactory();
 		
 		// create session
@@ -23,16 +23,24 @@ public class CreateManager {
 		try {			
 			
 			// create the objects
-			Manager tempManager =
+			/*
+			Manager tempManager = 
+					new Manager("Chad", "Darby", "darby@luv2code.com");
+			
+			Team tempTeam =
+					new Team(
+							"http://www.luv2code.com/youtube",
+							"Luv 2 code!!!");		
+			*/
+			
+			Manager tempManager = 
 					new Manager("Amir", "Khalighi", "amirsnw@gmail.com");
 			
-			ManagerInfo tempManagerInfo =
-					new ManagerInfo(
-							"https://www.linkedin.com/in/amirsnw",
-							"Software Engineer");
+			Team tempTeam =
+					new Team("Modern Systems");
 			
 			// associate the objects
-			tempManager.setManagerInfo(tempManagerInfo);
+			tempManager.setTeam(tempTeam);
 			
 			// start a transaction
 			session.beginTransaction();

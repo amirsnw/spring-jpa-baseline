@@ -1,4 +1,4 @@
-package com.hibernate.entity;
+package com.hibernate.entity.one.to.one;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,6 +45,10 @@ public class Manager {
 	@OneToOne(cascade=CascadeType.ALL) // OneToOne default : FetchType.EAGER
 	@JoinColumn(name="manager_info_id")
 	private ManagerInfo managerInfo;
+
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="team_id")
+	private Team team;
 	
 	public Manager() {
 		
@@ -96,10 +100,18 @@ public class Manager {
 		this.managerInfo = managerInfo;
 	}
 
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
 	@Override
 	public String toString() {
 		return "Manager [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", managerInfo=" + managerInfo + "]";
+				+ ", managerInfo=" + managerInfo + ", team=" + team + "]";
 	}
 	
 	

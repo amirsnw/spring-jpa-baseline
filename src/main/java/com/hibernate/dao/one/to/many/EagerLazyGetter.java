@@ -1,7 +1,7 @@
 package com.hibernate.dao.one.to.many;
 
-import com.hibernate.entity.Follower;
-import com.hibernate.entity.Influencer;
+import com.hibernate.entity.one.to.many.Follower;
+import com.hibernate.entity.one.to.many.Influencer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

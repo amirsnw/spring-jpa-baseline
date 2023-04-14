@@ -1,13 +1,12 @@
-package com.hibernate.dao.one.to.one.bi;
-
+package com.hibernate.dao.one.to.one.uni;
 
 import com.hibernate.entity.one.to.one.Manager;
-import com.hibernate.entity.one.to.one.ManagerInfo;
+import com.hibernate.entity.one.to.one.Team;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class GetManagerInfo {
+public class DeleteDemo {
 
 	public static void main(String[] args) {
 
@@ -15,41 +14,41 @@ public class GetManagerInfo {
 		SessionFactory factory = new Configuration()
 								.configure("hibernate.cfg.xml")
 								.addAnnotatedClass(Manager.class)
-								.addAnnotatedClass(ManagerInfo.class)
+								.addAnnotatedClass(Team.class)
 								.buildSessionFactory();
 		
 		// create session
 		Session session = factory.getCurrentSession();
-		
-		try {			
+
+		try {
 			
 			// start a transaction
 			session.beginTransaction();
 
-			// get the manager info object
-			int theId = 2999;
-			ManagerInfo tempManagerInfo =
-					session.get(ManagerInfo.class, theId);
+			// get manager by primary key / id
+			int theId = 1;
+			Manager tempManager = 
+					session.get(Manager.class, theId);
 			
-			// print the manager info
-			System.out.println("tempManagerInfo: " + tempManagerInfo);
-						
-			// print the associated manager
-			System.out.println("the associated manager: " +
-								tempManagerInfo.getManager());
+			System.out.println("Found manager: " + tempManager);
+			
+			// delete the managers
+			if (tempManager != null) {
+			
+				System.out.println("Deleting: " + tempManager);
+				
+				// Note: will ALSO delete associated "team" object
+				// because of CascadeType.ALL
+				//
+				session.delete(tempManager);				
+			}
 			
 			// commit transaction
 			session.getTransaction().commit();
 			
 			System.out.println("Done!");
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
 		finally {
-			// handle connection leak issue
-			session.close();
-			
 			factory.close();
 		}
 	}

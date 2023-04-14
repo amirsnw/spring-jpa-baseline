@@ -1,4 +1,4 @@
-package com.hibernate.entity;
+package com.hibernate.entity.simple;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +26,6 @@ public class Student {
 	private String email;
 	
 	public Student() {
-		
 	}
 
 	// A constructor with all the fields except primary key
