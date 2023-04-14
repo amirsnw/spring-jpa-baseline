@@ -1,4 +1,4 @@
-package com.hibernate.dao.one.to.many;
+package com.hibernate.dao.one.to.many.bi;
 
 import com.hibernate.entity.Follower;
 import com.hibernate.entity.Influencer;

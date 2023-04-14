@@ -1,6 +1,8 @@
 package com.hibernate.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="follower")
@@ -16,9 +18,13 @@ public class Follower {
 	private String username;
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-						 CascadeType.DETACH, CascadeType.REFRESH})
+						 CascadeType.DETACH, CascadeType.REFRESH}) // ManyToOne default : FetchType.EAGER
 	@JoinColumn(name="influencer_id")
 	private Influencer influencer;
+
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) // OneToMany default : FetchType.LAZY
+	@JoinColumn(name="follower_id")
+	private List<Story> stories;
 	
 	public Follower() {
 	}
@@ -51,10 +57,27 @@ public class Follower {
 		this.influencer = influencer;
 	}
 
+	public List<Story> getStories() {
+		return stories;
+	}
+
+	public void setStories(List<Story> stories) {
+		this.stories = stories;
+	}
+
 	@Override
 	public String toString() {
 		return "Follower [id=" + id + ", username=" + username + "]";
 	}
-	
-	
+
+	// add a convenience method
+
+	public void addStory(Story theStory) {
+
+		if (stories == null) {
+			stories = new ArrayList<>();
+		}
+
+		stories.add(theStory);
+	}
 }

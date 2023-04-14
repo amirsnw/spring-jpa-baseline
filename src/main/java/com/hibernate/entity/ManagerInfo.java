@@ -43,7 +43,7 @@ public class ManagerInfo {
 	// Reference back to Manager
 	@OneToOne(mappedBy="managerInfo",
 			cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-						CascadeType.REFRESH})
+						CascadeType.REFRESH}) // OneToOne default : FetchType.EAGER
 	private Manager manager;
 
 	public ManagerInfo() {

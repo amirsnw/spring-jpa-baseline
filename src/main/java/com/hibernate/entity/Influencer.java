@@ -26,7 +26,7 @@ public class Influencer {
 	
 	@OneToMany(mappedBy="influencer",
 			   cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-						 CascadeType.DETACH, CascadeType.REFRESH})
+						 CascadeType.DETACH, CascadeType.REFRESH}) // OneToMany default : FetchType.LAZY
 	private List<Follower> followers;
 	
 	

@@ -1,4 +1,4 @@
-package com.hibernate.dao.one.to.many;
+package com.hibernate.dao.one.to.many.bi;
 
 import com.hibernate.entity.Follower;
 import com.hibernate.entity.Influencer;
@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateFollowers {
+public class DeleteFollower {
 
 	public static void main(String[] args) {
 
@@ -21,26 +21,19 @@ public class CreateFollowers {
 		Session session = factory.getCurrentSession();
 		
 		try {			
-
+			
 			// start a transaction
 			session.beginTransaction();
 			
-			// get the influencer from db
-			int theId = 67;
-			Influencer tempInfluencer = session.get(Influencer.class, theId);		
+			// get a follower
+			int theId = 10;
+			Follower tempFollower = session.get(Follower.class, theId);
 			
-			// create some followers
-			Follower tempFollower1 = new Follower("amirsnw");
-			Follower tempFollower2 = new Follower("amisnw14");
+			// delete follower
+			System.out.println("Deleting follower: " + tempFollower);
 			
-			// add followers to influencer
-			tempInfluencer.addFollower(tempFollower1);
-			tempInfluencer.addFollower(tempFollower2);
-			
-			// save the followers
-			session.save(tempFollower1);
-			session.save(tempFollower2);
-			
+			session.delete(tempFollower);
+
 			// commit transaction
 			session.getTransaction().commit();
 			

@@ -42,7 +42,7 @@ public class Manager {
 	@Column(name="email")
 	private String email;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL) // OneToOne default : FetchType.EAGER
 	@JoinColumn(name="manager_info_id")
 	private ManagerInfo managerInfo;
 	

@@ -18,13 +18,3 @@ CREATE SEQUENCE inf_seq START WITH 1;
 
 ALTER TABLE influencer ADD (
   CONSTRAINT inf_pk PRIMARY KEY (id));
-
-CREATE OR REPLACE TRIGGER inf_trg
-BEFORE INSERT ON influencer
-FOR EACH ROW
-
-BEGIN
-  SELECT inf_pk.NEXTVAL
-  INTO   :new.id
-  FROM   dual;
-END;

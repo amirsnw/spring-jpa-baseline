@@ -5,8 +5,10 @@ import com.hibernate.entity.Influencer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
-public class DeleteFollower {
+
+public class EagerLazyHQL {
 
 	public static void main(String[] args) {
 
@@ -25,17 +27,34 @@ public class DeleteFollower {
 			// start a transaction
 			session.beginTransaction();
 			
-			// get a follower
-			int theId = 10;
-			Follower tempFollower = session.get(Follower.class, theId);
+			// option 2: Hibernate query with HQL
 			
-			// delete follower
-			System.out.println("Deleting follower: " + tempFollower);
-			
-			session.delete(tempFollower);
+			// get the influencer from db
+			int theId = 1;
+			Query<Influencer> query =
+					session.createQuery("select i from Influencer i "
+									+ "JOIN FETCH i.followers "
+									+ "where i.id=:theInfluencerId",
+							Influencer.class);
 
+			// set parameter on query
+			query.setParameter("theInfluencerId", theId);
+			
+			// execute query and get influencer
+			Influencer tempInfluencer = query.getSingleResult();
+			
+			System.out.println("Influencer: " + tempInfluencer);
+			
 			// commit transaction
 			session.getTransaction().commit();
+			
+			// close the session
+			session.close();
+			
+			System.out.println("\nThe session is now closed!\n");
+			
+			// get followers for the influencer
+			System.out.println("Followers: " + tempInfluencer.getFollowers());
 			
 			System.out.println("Done!");
 		}

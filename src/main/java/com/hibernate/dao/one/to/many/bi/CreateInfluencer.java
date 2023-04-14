@@ -1,12 +1,12 @@
-package com.hibernate.dao.one.to.many;
+package com.hibernate.dao.one.to.many.bi;
 
-
+import com.hibernate.entity.Follower;
 import com.hibernate.entity.Influencer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class DeleteInfluencer {
+public class CreateInfluencer {
 
 	public static void main(String[] args) {
 
@@ -14,6 +14,7 @@ public class DeleteInfluencer {
 		SessionFactory factory = new Configuration()
 								.configure("hibernate.cfg.xml")
 								.addAnnotatedClass(Influencer.class)
+								.addAnnotatedClass(Follower.class)
 								.buildSessionFactory();
 		
 		// create session
@@ -21,23 +22,16 @@ public class DeleteInfluencer {
 		
 		try {			
 			
+			// create the objects
+			Influencer tempInfluencer =
+					new Influencer("Amir", "Khalighi", "amirsnw@gmail.com");
+			
 			// start a transaction
 			session.beginTransaction();
-
-			// get influencer by primary key / id
-			int theId = 1;
-			Influencer tempInfluencer = 
-					session.get(Influencer.class, theId);
 			
-			System.out.println("Found influencer: " + tempInfluencer);
-			
-			// delete the influencer
-			if (tempInfluencer != null) {
-			
-				System.out.println("Deleting: " + tempInfluencer);
-				
-				session.delete(tempInfluencer);
-			}
+			// save the influencer
+			System.out.println("Saving influencer: " + tempInfluencer);
+			session.save(tempInfluencer);					
 			
 			// commit transaction
 			session.getTransaction().commit();
