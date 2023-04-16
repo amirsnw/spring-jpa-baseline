@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateDemo {
+public class CreateManagerAndTeam {
 
 	public static void main(String[] args) {
 
@@ -21,19 +21,7 @@ public class CreateDemo {
 		Session session = factory.getCurrentSession();
 		
 		try {			
-			
-			// create the objects
-			/*
-			Manager tempManager = 
-					new Manager("Chad", "Darby", "darby@luv2code.com");
-			
-			Team tempTeam =
-					new Team(
-							"http://www.luv2code.com/youtube",
-							"Luv 2 code!!!");		
-			*/
-			
-			Manager tempManager = 
+			Manager tempManager =
 					new Manager("Amir", "Khalighi", "amirsnw@gmail.com");
 			
 			Team tempTeam =
