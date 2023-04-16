@@ -1,4 +1,4 @@
-package com.hibernate.entity.many.to.many;
+package com.hibernate.model.many.to.many;
 
 import java.util.List;
 

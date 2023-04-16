@@ -1,7 +1,7 @@
 package com.hibernate.dao.one.to.one.uni;
 
-import com.hibernate.entity.one.to.one.Manager;
-import com.hibernate.entity.one.to.one.Team;
+import com.hibernate.model.one.to.one.Manager;
+import com.hibernate.model.one.to.one.Team;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

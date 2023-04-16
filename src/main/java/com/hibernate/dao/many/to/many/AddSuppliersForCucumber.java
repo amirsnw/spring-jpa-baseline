@@ -1,7 +1,7 @@
 package com.hibernate.dao.many.to.many;
 
-import com.hibernate.entity.many.to.many.Product;
-import com.hibernate.entity.many.to.many.Supplier;
+import com.hibernate.model.many.to.many.Product;
+import com.hibernate.model.many.to.many.Supplier;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

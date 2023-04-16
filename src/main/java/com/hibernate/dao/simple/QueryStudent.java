@@ -2,7 +2,7 @@ package com.hibernate.dao.simple;
 
 import java.util.List;
 
-import com.hibernate.entity.simple.Student;
+import com.hibernate.model.simple.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

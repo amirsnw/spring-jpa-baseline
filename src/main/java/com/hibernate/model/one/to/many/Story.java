@@ -1,4 +1,4 @@
-package com.hibernate.entity.one.to.many;
+package com.hibernate.model.one.to.many;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
