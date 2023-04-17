@@ -3,12 +3,16 @@ package com.hibernate.model.one.to.one.sharedPK.bi;
 import javax.persistence.*;
 
 @Entity
+@Table(name="manuscript")
 public class Manuscript {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "manuscript_sequence")
+    @SequenceGenerator(name = "manuscript_sequence", sequenceName = "manu_seq", allocationSize = 1)
+    @Column(name="id")
+    private int id;
 
-    @Column(name="water-mark")
+    @Column(name="water_mark")
     private String waterMark;
 
     @OneToOne
@@ -23,11 +27,11 @@ public class Manuscript {
         this.waterMark = waterMark;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

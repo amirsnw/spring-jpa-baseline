@@ -3,12 +3,14 @@ package com.hibernate.model.one.to.one.sharedPK.bi;
 import javax.persistence.*;
 
 @Entity
+@Table(name="book")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "book_seq")
-    private Long id;
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "book_sequence")
+    @SequenceGenerator(name = "book_sequence", sequenceName = "book_seq", allocationSize = 1)
+    @Column(name="id")
+    private int id;
 
     @Column(name="title")
     private String title;
@@ -23,11 +25,11 @@ public class Book {
         this.title = title;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

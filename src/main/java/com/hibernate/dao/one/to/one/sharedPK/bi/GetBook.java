@@ -1,5 +1,6 @@
 package com.hibernate.dao.one.to.one.sharedPK.bi;
 
+
 import com.hibernate.model.one.to.one.Manager;
 import com.hibernate.model.one.to.one.ManagerInfo;
 import com.hibernate.model.one.to.one.sharedPK.bi.Book;
@@ -8,7 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class AddManuscriptToBook {
+public class GetBook {
 
 	public static void main(String[] args) {
 
@@ -23,33 +24,32 @@ public class AddManuscriptToBook {
 		Session session = factory.getCurrentSession();
 		
 		try {
-
 			// start a transaction
 			session.beginTransaction();
 
-			// get the product cucumber from database
-			int bookId = 1;
-			Book tempBook = session.get(Book.class, bookId);
-
-			System.out.println("\nLoaded Book: " + tempBook);
-
-			Manuscript manuscript = new Manuscript("Copy Write");
-			manuscript.setBook(tempBook);
-
-			// add manuscript to book
-			tempBook.setManuscript(manuscript);
-
-			// save the manuscript
-			System.out.println("\nSaving the Manuscript ...");
-
-			session.save(manuscript);
-
+			// get the manager info object
+			int theId = 1;
+			Book tempBook =	session.get(Book.class, theId);
+			
+			// print the manager info
+			System.out.println("Book: " + tempBook);
+						
+			// print the associated manager
+			System.out.println("the associated manuscript: " +
+					tempBook.getManuscript());
+			
 			// commit transaction
 			session.getTransaction().commit();
-
+			
 			System.out.println("Done!");
 		}
+		catch (Exception exc) {
+			exc.printStackTrace();
+		}
 		finally {
+			// handle connection leak issue
+			session.close();
+			
 			factory.close();
 		}
 	}
