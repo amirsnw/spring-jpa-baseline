@@ -31,7 +31,7 @@ public class AddManuscriptToBook {
 			int bookId = 1;
 			Book tempBook = session.get(Book.class, bookId);
 
-			System.out.println("\nLoaded Book: " + tempBook);
+			System.out.println("\nLoaded Car: " + tempBook);
 
 			Manuscript manuscript = new Manuscript("Copy Write");
 			manuscript.setBook(tempBook);
@@ -40,7 +40,7 @@ public class AddManuscriptToBook {
 			tempBook.setManuscript(manuscript);
 
 			// save the manuscript
-			System.out.println("\nSaving the Manuscript ...");
+			System.out.println("\nSaving the Engine ...");
 
 			session.save(manuscript);
 

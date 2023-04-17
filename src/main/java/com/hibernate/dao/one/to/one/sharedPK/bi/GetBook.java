@@ -32,7 +32,7 @@ public class GetBook {
 			Book tempBook =	session.get(Book.class, theId);
 			
 			// print the manager info
-			System.out.println("Book: " + tempBook);
+			System.out.println("Car: " + tempBook);
 						
 			// print the associated manager
 			System.out.println("the associated manuscript: " +

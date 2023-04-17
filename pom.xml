@@ -25,6 +25,17 @@
       <groupId>com.oracle.ojdbc</groupId>
       <artifactId>ojdbc8</artifactId>
       <version>19.3.0.0</version>
+      <!--Question Link: https://stackoverflow.com/questions/58873384/spring-boot-app-error-log-says-attempt-to-configure-ons-in-fanmanager-failed-wit-->
+      <exclusions>
+        <exclusion>
+          <groupId>com.oracle.ojdbc</groupId>
+          <artifactId>simplefan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.oracle.ojdbc</groupId>
+          <artifactId>ons</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

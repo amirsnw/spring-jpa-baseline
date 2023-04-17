@@ -9,7 +9,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "book_sequence")
     @SequenceGenerator(name = "book_sequence", sequenceName = "book_seq", allocationSize = 1)
-    @Column(name="id")
+    @Column(name="book_id")
     private int id;
 
     @Column(name="title")
@@ -51,7 +51,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book [" +
+        return "Car [" +
                 "id=" + id +
                 ", title=" + title + "]";
     }

@@ -7,12 +7,14 @@ begin
    end if;
 end;
 
+DROP SEQUENCE book_seq
+
 CREATE table book (
-   id NUMBER(11) NOT NULL,
+   book_id NUMBER(11) NOT NULL,
    title VARCHAR2(45)
 );
 
 CREATE SEQUENCE book_seq START WITH 1;
 
 ALTER TABLE book ADD (
-  CONSTRAINT book_pk PRIMARY KEY (id));
+  CONSTRAINT book_pk PRIMARY KEY (book_id));

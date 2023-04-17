@@ -9,14 +9,14 @@ public class Manuscript {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "manuscript_sequence")
     @SequenceGenerator(name = "manuscript_sequence", sequenceName = "manu_seq", allocationSize = 1)
-    @Column(name="id")
+    @Column(name="man_id")
     private int id;
 
     @Column(name="water_mark")
     private String waterMark;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "man_id")
     @MapsId
     private Book book;
 
@@ -53,7 +53,7 @@ public class Manuscript {
 
     @Override
     public String toString() {
-        return "Manuscript [" +
+        return "Engine [" +
                 "id=" + id +
                 ", waterMark=" + waterMark + "]";
     }
