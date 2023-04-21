@@ -13,7 +13,7 @@
         <property name="connection.password">techins</property>
 
         <!-- JDBC connection pool settings ... using built-in test pool -->
-        <property name="connection.pool_size">1</property>
+        <property name="connection.pool_size">4</property>
 
         <!-- Select our SQL dialect based on database type and version -->
         <property name="dialect">org.hibernate.dialect.Oracle12cDialect</property>
