@@ -1,6 +1,7 @@
+package com.hibernate.dto.json;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hibernate.dto.json.Operator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,7 +39,7 @@ public class OperatorTest {
     private static Stream<Arguments> JsonOperatorGenerator() {
 
         return Stream.of(
-                Arguments.of("{\"name\":\"eq\"}", Operator.EQUAL),
+                Arguments.of("\"EQUAL\"", Operator.EQUAL),
                 Arguments.of("\"NOT_EQUAL\"", Operator.NOT_EQUAL),
                 Arguments.of("\"LIKE\"", Operator.LIKE),
                 Arguments.of("\"BETWEEN\"", Operator.BETWEEN),

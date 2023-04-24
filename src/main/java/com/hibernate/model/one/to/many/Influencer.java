@@ -90,7 +90,6 @@ public class Influencer {
 
 		follower.setInfluencer(this);
 	}
-	
 }
 
 

@@ -53,7 +53,7 @@ public class Manuscript {
 
     @Override
     public String toString() {
-        return "Engine [" +
+        return "Manuscript [" +
                 "id=" + id +
                 ", waterMark=" + waterMark + "]";
     }
