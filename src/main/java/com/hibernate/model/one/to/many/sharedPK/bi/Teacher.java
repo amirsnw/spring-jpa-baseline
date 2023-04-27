@@ -10,11 +10,11 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "teacher_sequence")
-    @SequenceGenerator(name = "teacher_sequence", sequenceName = "teacher_seq", allocationSize = 1)
-    @Column(name="teacher_id")
+    @SequenceGenerator(name = "teacher_sequence", sequenceName = "tch_seq", allocationSize = 1)
+    @Column(name="id")
     private int teacherId;
 
-    @Column(name="fullname")
+    @Column(name="full_name")
     private String fullName;
 
     // Primary-key of parent is foreign-key of child
@@ -22,6 +22,10 @@ public class Teacher {
     private List<Student> students;
 
     public Teacher() {
+    }
+
+    public Teacher(int teacherId) {
+        this.teacherId = teacherId;
     }
 
     public Teacher(String fullName) {

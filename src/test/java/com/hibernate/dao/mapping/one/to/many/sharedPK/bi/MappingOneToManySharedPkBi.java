@@ -2,221 +2,174 @@ package com.hibernate.dao.mapping.one.to.many.sharedPK.bi;
 
 import com.hibernate.model.one.to.many.sharedPK.bi.Student;
 import com.hibernate.model.one.to.many.sharedPK.bi.Teacher;
+import org.aspectj.lang.annotation.Before;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.Query;
+import org.junit.jupiter.api.*;
 
+import javax.persistence.PersistenceException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@Order(2)
 @DisplayName("Test One To Many Bidirectional Mapping by Shared Primary Key")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MappingOneToManySharedPkBi {
 
-	void createAddStudents() {
+    SessionFactory factory;
+    Session session;
+    int teacherId;
 
-		// create session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Teacher.class)
-				.addAnnotatedClass(Student.class)
-				.buildSessionFactory();
+    // TODO: There are plenty of other sad ending scenarios ...
 
-		// create session
-		Session session = factory.getCurrentSession();
+    @BeforeAll
+    void setup() {
+        // create session factory
+        factory = new Configuration()
+                .configure("hibernate.cfg.xml")
+                .addAnnotatedClass(Teacher.class)
+                .addAnnotatedClass(Student.class)
+                .buildSessionFactory();
+    }
 
-		try {
-			// start a transaction
-			session.beginTransaction();
+    @BeforeEach
+    void startTransaction() {
+        // create session
+        session = factory.getCurrentSession();
 
-			// get the teacher from db
-			int theId = 67;
-			Teacher tempTeacher = session.get(Teacher.class, theId);
+        // start a transaction
+        session.beginTransaction();
+    }
 
-			// create some students
-			Student tempStudent1 = new Student("Nataly Vaughn", 44);
-			Student tempStudent2 = new Student("Marc Boyd", 30);
+    @AfterEach
+    void closeTransaction() {
+        // Close transaction
+        session.getTransaction().commit();
+        // Close session
+        session.close();
+    }
 
-			// add students to teacher
-			tempTeacher.addStudent(tempStudent1);
-			tempTeacher.addStudent(tempStudent2);
+    @AfterAll
+    void finished() {
+        // clean it up
+        factory.close();
+    }
 
-			// save the students
-			session.save(tempStudent1);
-			session.save(tempStudent2);
+    @Order(1)
+    @Test
+    void createTeacher_ByGivenPrameters_ShouldNotThrowException() {
 
-			// commit transaction
-			session.getTransaction().commit();
+        // create the objects
+        Teacher tempTeacher =
+                new Teacher("Rudy Lowe");
 
-			System.out.println("Done!");
-		}
-		finally {
+        // Save teacher and assert that no exception happens
+        assertDoesNotThrow(() -> teacherId = (int) session.save(tempTeacher),
+                "Saving teacher should not throw any exception");
+    }
 
-			// add clean up code
-			session.close();
+    @Order(2)
+    @Test
+    void addStudentsToTeacher_UsingPreSavedTeacher_ShouldNotThrowException() {
 
-			factory.close();
-		}
-	}
+        // Arrange
+        Teacher tempTeacher;
+        Student tempStudent1 = new Student("Nataly Vaughn", 44);
+        Student tempStudent2 = new Student("Marc Boyd", 30);
 
-	void createTeacher() {
+        // Act
+        // get teacher from db
+        tempTeacher = session.get(Teacher.class, teacherId);
+        // add students to teacher
+        tempTeacher.addStudent(tempStudent1);
+        tempTeacher.addStudent(tempStudent2);
 
-		// create session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Teacher.class)
-				.addAnnotatedClass(Student.class)
-				.buildSessionFactory();
+        // Save student and assert that no exception happens
+        assertDoesNotThrow(() -> session.save(tempStudent1),
+                "Saving student2 should not throw any exception");
 
-		// create session
-		Session session = factory.getCurrentSession();
+        assertDoesNotThrow(() -> session.save(tempStudent2),
+                "Saving student1 should not throw any exception");
+    }
 
-		try {
+    @Order(3)
+    @Test
+    void getTeacherAndStudents_PredSavedRecords_ReturnNotNullTeacherAndTwoStudents() {
 
-			// create the objects
-			Teacher tempTeacher =
-					new Teacher("Rudy Lowe");
+        // Arrange
+        int expectedStudentListSize = 2;
+        Teacher tempTeacher;
 
-			// start a transaction
-			session.beginTransaction();
+        // Act: get the teacher from db
+        tempTeacher = session.get(Teacher.class, teacherId);
 
-			// save the teacher
-			System.out.println("Saving teacher: " + tempTeacher);
-			session.save(tempTeacher);
+        // Assert
+        assertNotNull(tempTeacher, "Teacher should be found");
+        assertEquals(expectedStudentListSize, tempTeacher.getStudents().size(), "Should return two student");
+    }
 
-			// commit transaction
-			session.getTransaction().commit();
+    @Order(4)
+    @Test
+    void deleteTeacher_WhenHashStudentsHQL_ShowThrowConstraintViolationException() {
 
-			System.out.println("Done!");
-		}
-		finally {
-			factory.close();
-		}
-	}
+        // Arrange
+        Query query = session.createQuery("delete Teacher where id > :teacherId");
+        query.setParameter("teacherId", teacherId);
+        int result;
 
-	void deleteStudent() {
+        // Act
+        result = query.executeUpdate();
 
-		// create session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Teacher.class)
-				.addAnnotatedClass(Student.class)
-				.buildSessionFactory();
+        if (result > 0) {
+            System.out.println("Expensive products was removed");
+        }
 
-		// create session
-		Session session = factory.getCurrentSession();
+        assertFalse(result > 0,
+                "Teacher can not be removed while there are students connected to it");
+    }
 
-		try {
+    /*@Order(5)
+    @Test
+    void deleteTeacher_WhenHashStudents_ShowThrowConstraintViolationException() {
 
-			// start a transaction
-			session.beginTransaction();
+        // Arrange
+        final Teacher tempTeacher = new Teacher(teacherId);
+        tempTeacher.setTeacherId(teacherId);
 
-			// get a student
-			int theId = 10;
-			Student tempStudent = session.get(Student.class, theId);
+        // Arrange and Act: delete the teacher (Cascade.All = true)
+        assertThrows(Error.class, () -> session.delete(tempTeacher),
+                () -> "Teacher can not be removed while there are students connected to it");
+    }*/
 
-			// delete student
-			System.out.println("Deleting student: " + tempStudent);
+    @Order(5)
+    @Test
+    void deleteTeacher_AndDeleteStudents_ShouldThrowsNoException() {
 
-			session.delete(tempStudent);
+        // Arrange
+        final Teacher tempTeacher;
 
-			// commit transaction
-			session.getTransaction().commit();
+        // Act
+        tempTeacher = session.get(Teacher.class, teacherId);
 
-			System.out.println("Done!");
-		}
-		finally {
+        // Act And Assert
+        assertDoesNotThrow(() -> {
+                    tempTeacher.getStudents().forEach(item -> {
+                        session.delete(item);
+                    });
+                    session.delete(tempTeacher);
+                },
+                () -> "Deleting teacher with id=" + teacherId + "should not throw any exception");
 
-			// add clean up code
-			session.close();
-
-			factory.close();
-		}
-	}
-
-	void deleteTeacher() {
-
-		// create session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Teacher.class)
-				.buildSessionFactory();
-
-		// create session
-		Session session = factory.getCurrentSession();
-
-		try {
-
-			// start a transaction
-			session.beginTransaction();
-
-			// get teacher by primary key / id
-			int theId = 1;
-			Teacher tempTeacher =
-					session.get(Teacher.class, theId);
-
-			System.out.println("Found teacher: " + tempTeacher);
-
-			// delete the teacher
-			if (tempTeacher != null) {
-
-				System.out.println("Deleting: " + tempTeacher);
-
-				session.delete(tempTeacher);
-			}
-
-			// commit transaction
-			session.getTransaction().commit();
-
-			System.out.println("Done!");
-		}
-		finally {
-			factory.close();
-		}
-	}
-
-	void getTeacherStudents() {
-
-		// create session factory
-		SessionFactory factory = new Configuration()
-				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Teacher.class)
-				.addAnnotatedClass(Student.class)
-				.buildSessionFactory();
-
-		// create session
-		Session session = factory.getCurrentSession();
-
-		try {
-
-			// start a transaction
-			session.beginTransaction();
-
-			// get the teacher from db
-			int theId = 67;
-			Teacher tempTeacher = session.get(Teacher.class, theId);
-
-			System.out.println("Teacher: " + tempTeacher);
-
-			// get students for the teacher
-			System.out.println("Students: " + tempTeacher.getStudents());
-
-			// commit transaction
-			session.getTransaction().commit();
-
-			System.out.println("Done!");
-		}
-		finally {
-
-			// add clean up code
-			session.close();
-
-			factory.close();
-		}
-	}
+        assertNull(session.get(Teacher.class, teacherId), "Should not return any teacher");
+    }
 }
 
 

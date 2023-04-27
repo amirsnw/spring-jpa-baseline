@@ -7,18 +7,23 @@ begin
    end if;
 end;
 
+DROP SEQUENCE stu_seq
 
 CREATE SEQUENCE stu_seq START WITH 1;
 
 CREATE table student (
    id NUMBER(11) NOT NULL,
-   first_name VARCHAR2(45),
-   last_name VARCHAR2(45),
-   email VARCHAR2(45)
+   full_name VARCHAR2(45),
+   age NUMBER(3),
+   teacher_id NUMBER(11),
+   CONSTRAINT fk_teacher
+    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
 );
 
 ALTER TABLE student ADD (
   CONSTRAINT stu_pk PRIMARY KEY (id));
+
+DROP TRIGGER stu_trg
 
 CREATE OR REPLACE TRIGGER stu_trg 
 BEFORE INSERT ON student 

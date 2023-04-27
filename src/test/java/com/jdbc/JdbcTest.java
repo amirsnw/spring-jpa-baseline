@@ -1,6 +1,7 @@
 package com.jdbc;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.sql.DriverManager;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(1)
 @DisplayName("Test Connection")
 public class JdbcTest {
 
@@ -61,7 +63,6 @@ public class JdbcTest {
 		String jdbcUrl = "jdbc:oracle:thin:@//coredevdb.tamin.org:1521/bimehcore.tamin.org";
 		String user = "techins";
 		String pass = "techins";
-		String expectedExceptionMessage = "ORA-01017: invalid username/password; logon denied\n";
 
 		// Act & Assert
 		try {
