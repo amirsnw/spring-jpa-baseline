@@ -13,22 +13,6 @@ CREATE SEQUENCE tch_seq START WITH 1;
 
 CREATE table teacher (
    id NUMBER(11) NOT NULL,
-   full_name VARCHAR2(45)
+   full_name VARCHAR2(45),
+   CONSTRAINT teacher_pk PRIMARY KEY (id)
 );
-
-ALTER TABLE teacher ADD (
-  CONSTRAINT teacher_pk PRIMARY KEY (id));
-
-/***********************/
-
-DROP TRIGGER tch_trg
-
-CREATE OR REPLACE TRIGGER tch_trg
-BEFORE INSERT ON teacher
-FOR EACH ROW
-
-BEGIN
-  SELECT tch_seq.NEXTVAL
-  INTO   :new.id
-  FROM   dual;
-END;

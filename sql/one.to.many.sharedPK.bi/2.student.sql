@@ -16,23 +16,6 @@ CREATE table student (
    full_name VARCHAR2(45),
    age NUMBER(3),
    teacher_id NUMBER(11),
-   CONSTRAINT fk_teacher
-    FOREIGN KEY (teacher_id) REFERENCES TEACHER (id)
+   CONSTRAINT stu_pk PRIMARY KEY (id),
+   CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES TEACHER (id)
 );
-
-ALTER TABLE student ADD (
-  CONSTRAINT stu_pk PRIMARY KEY (id));
-
-/***********************/
-
-DROP TRIGGER stu_trg
-
-CREATE OR REPLACE TRIGGER stu_trg 
-BEFORE INSERT ON student 
-FOR EACH ROW
-
-BEGIN
-  SELECT stu_seq.NEXTVAL
-  INTO   :new.id
-  FROM   dual;
-END;

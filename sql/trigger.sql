@@ -1,0 +1,11 @@
+DROP TRIGGER stu_trg
+
+CREATE OR REPLACE TRIGGER stu_trg
+BEFORE INSERT ON student
+FOR EACH ROW
+
+BEGIN
+SELECT stu_seq.NEXTVAL
+INTO   :new.id
+FROM   dual;
+END;

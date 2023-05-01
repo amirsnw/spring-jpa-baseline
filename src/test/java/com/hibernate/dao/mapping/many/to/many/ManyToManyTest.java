@@ -2,12 +2,9 @@ package com.hibernate.dao.mapping.many.to.many;
 
 import com.hibernate.model.many.to.many.Product;
 import com.hibernate.model.many.to.many.Supplier;
-import com.hibernate.model.one.to.many.sharedPK.bi.Student;
-import com.hibernate.model.one.to.many.sharedPK.bi.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Test Many To Many Mapping")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MappingManyToMany {
+public class ManyToManyTest {
 
     SessionFactory factory;
     Session session;
@@ -59,9 +56,11 @@ public class MappingManyToMany {
     @Test
     void createSupplier_ByGivenParameters_ShouldNotThrowException() {
 
+        // Arrange
         // create a supplier
         Supplier tempSupplier = new Supplier("Snowman", "Forest", "US");
 
+        // Act And Assert
         // Save supplier and assert that no exception happens
         assertDoesNotThrow(() -> supplierId = (int) session.save(tempSupplier),
                 "Saving supplier should not throw any exception");
@@ -84,6 +83,7 @@ public class MappingManyToMany {
         tempSupplier.addProduct(tempProduct1);
         tempSupplier.addProduct(tempProduct2);
 
+        // Assert
         // Save products and assert that no exception happens
         assertDoesNotThrow(() -> session.save(tempProduct1),
                 "Saving product1 should not throw any exception");
@@ -113,7 +113,7 @@ public class MappingManyToMany {
     void deleteSupplierAndProducts_PredSavedSupplierAndProducts_ShouldNotThrowException() {
 
         // Arrange
-        final Supplier tempSupplier;
+        Supplier tempSupplier;
 
         // Act
         tempSupplier = session.get(Supplier.class, supplierId);
@@ -125,9 +125,9 @@ public class MappingManyToMany {
                     });
                     session.delete(tempSupplier);
                 },
-                () -> "Deleting supplier with id=" + supplierId + "should not throw any exception");
+                () -> "Deleting supplier with id=" + supplierId + " should not throw any exception");
 
-        assertNull(session.get(Supplier.class, supplierId), "Should not return any supplierId");
+        assertNull(session.get(Supplier.class, supplierId), "Should not return any supplier");
     }
 }
 

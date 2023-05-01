@@ -15,13 +15,9 @@ CREATE table student_simple (
    id NUMBER(11) NOT NULL,
    first_name VARCHAR2(45),
    last_name VARCHAR2(45),
-   email VARCHAR2(45)
+   email VARCHAR2(45),
+   CONSTRAINT stu_sim_pk PRIMARY KEY (id)
 );
-
-ALTER TABLE student_simple ADD (
-  CONSTRAINT stu_sim_pk PRIMARY KEY (id));
-
-/***********************/
 
 DROP TRIGGER stu_sim_trg
 

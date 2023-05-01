@@ -18,7 +18,7 @@ public class JdbcTest {
 	void TestConnection_WhenUsernameAndPasswordAreNotValid_ThenSQLExceptionHappens() {
 
 		// Arrange
-		String jdbcUrl = "jdbc:oracle:thin:@//coredevdb.tamin.org:1521/bimehcore.tamin.org";
+		String jdbcUrl = "jdbc:oracle:thin:@snowman-home:1521:XE";
 		String user = "NotValid";
 		String pass = "NotValid";
 		String expectedExceptionMessage = "ORA-01017: invalid username/password; logon denied\n";
@@ -60,7 +60,7 @@ public class JdbcTest {
 	void TestConnection_WhenJDBCUrlUsernameAndPasswordAreValid_ThenNoExceptionHappens() {
 
 		// Arrange
-		String jdbcUrl = "jdbc:oracle:thin:@//coredevdb.tamin.org:1521/bimehcore.tamin.org";
+		String jdbcUrl = "jdbc:oracle:thin:@snowman-home:1521:XE";
 		String user = "techins";
 		String pass = "techins";
 

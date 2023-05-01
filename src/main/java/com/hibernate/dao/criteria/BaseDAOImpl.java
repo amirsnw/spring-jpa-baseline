@@ -1,4 +1,4 @@
-package com.hibernate.dao.mapping.criteria;
+package com.hibernate.dao.criteria;
 
 import com.hibernate.dto.json.Filter;
 import com.hibernate.dto.json.FilterWrapper;

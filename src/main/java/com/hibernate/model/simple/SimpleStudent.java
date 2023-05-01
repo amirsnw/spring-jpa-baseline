@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class SimpleStudent {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) // Auto increment id
+	@GeneratedValue(strategy=GenerationType.IDENTITY) // Auto increment id by trigger
 	@Column(name="id")
 	private int id;
 	

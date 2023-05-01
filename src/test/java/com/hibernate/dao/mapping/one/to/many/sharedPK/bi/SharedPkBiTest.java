@@ -2,27 +2,19 @@ package com.hibernate.dao.mapping.one.to.many.sharedPK.bi;
 
 import com.hibernate.model.one.to.many.sharedPK.bi.Student;
 import com.hibernate.model.one.to.many.sharedPK.bi.Teacher;
-import org.aspectj.lang.annotation.Before;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
-import javax.persistence.PersistenceException;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Order(3)
 @DisplayName("Test One To Many Bidirectional Mapping by Shared Primary Key")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MappingOneToManySharedPkBi {
+public class SharedPkBiTest {
 
     SessionFactory factory;
     Session session;
@@ -154,7 +146,7 @@ public class MappingOneToManySharedPkBi {
     void deleteTeacher_AndDeleteStudents_ShouldThrowsNoException() {
 
         // Arrange
-        final Teacher tempTeacher;
+        Teacher tempTeacher;
 
         // Act
         tempTeacher = session.get(Teacher.class, teacherId);
@@ -166,7 +158,7 @@ public class MappingOneToManySharedPkBi {
                     });
                     session.delete(tempTeacher);
                 },
-                () -> "Deleting teacher with id=" + teacherId + "should not throw any exception");
+                () -> "Deleting teacher with id=" + teacherId + " should not throw any exception");
 
         assertNull(session.get(Teacher.class, teacherId), "Should not return any teacher");
     }

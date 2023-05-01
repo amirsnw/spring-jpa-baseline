@@ -1,8 +1,5 @@
 package com.hibernate.dao.mapping.simple;
 
-import com.hibernate.model.many.to.many.Product;
-import com.hibernate.model.many.to.many.Supplier;
-import com.hibernate.model.one.to.many.sharedPK.bi.Student;
 import com.hibernate.model.simple.SimpleStudent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -110,29 +107,24 @@ public class MappingSimple {
                     assertTrue(query.getSingleResult() instanceof SimpleStudent);
                 },
                 () -> "student with first-name 'Amy' should be found");;
-    }
+    }*/
 
     @Order(4)
     @Test
-    void deleteSupplierAndProducts_PredSavedSupplierAndProducts_ShouldNotThrowException() {
+    void deleteStudent_PredSavedStudent_ShouldNotThrowException() {
 
         // Arrange
-        final Supplier tempSupplier;
+        final SimpleStudent tempStudent;
 
         // Act
-        tempSupplier = session.get(Supplier.class, supplierId);
+        tempStudent = session.get(SimpleStudent.class, studentId);
 
         // Act And Assert
-        assertDoesNotThrow(() -> {
-                    tempSupplier.getProducts().forEach(item -> {
-                        session.delete(item);
-                    });
-                    session.delete(tempSupplier);
-                },
-                () -> "Deleting supplier with id=" + supplierId + "should not throw any exception");
+        assertDoesNotThrow(() -> session.delete(tempStudent),
+                () -> "Deleting student with id=" + studentId + "should not throw any exception");
 
-        assertNull(session.get(Supplier.class, supplierId), "Should not return any supplierId");
-    }*/
+        assertNull(session.get(SimpleStudent.class, studentId), "Should not return any student");
+    }
 }
 
 
