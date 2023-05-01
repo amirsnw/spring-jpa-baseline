@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@Order(2)
+@Order(3)
 @DisplayName("Test One To Many Bidirectional Mapping by Shared Primary Key")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -65,7 +65,7 @@ public class MappingOneToManySharedPkBi {
 
     @Order(1)
     @Test
-    void createTeacher_ByGivenPrameters_ShouldNotThrowException() {
+    void createTeacher_ByGivenParameters_ShouldNotThrowException() {
 
         // create the objects
         Teacher tempTeacher =
@@ -94,10 +94,10 @@ public class MappingOneToManySharedPkBi {
 
         // Save student and assert that no exception happens
         assertDoesNotThrow(() -> session.save(tempStudent1),
-                "Saving student2 should not throw any exception");
+                "Saving student1 should not throw any exception");
 
         assertDoesNotThrow(() -> session.save(tempStudent2),
-                "Saving student1 should not throw any exception");
+                "Saving student2 should not throw any exception");
     }
 
     @Order(3)
@@ -118,7 +118,7 @@ public class MappingOneToManySharedPkBi {
 
     @Order(4)
     @Test
-    void deleteTeacher_WhenHashStudentsHQL_ShowThrowConstraintViolationException() {
+    void deleteTeacher_WhenHasStudentsHQL_ShowThrowConstraintViolationException() {
 
         // Arrange
         Query query = session.createQuery("delete Teacher where id > :teacherId");
@@ -138,7 +138,7 @@ public class MappingOneToManySharedPkBi {
 
     /*@Order(5)
     @Test
-    void deleteTeacher_WhenHashStudents_ShowThrowConstraintViolationException() {
+    void deleteTeacher_WhenHasStudents_ShowThrowConstraintViolationException() {
 
         // Arrange
         final Teacher tempTeacher = new Teacher(teacherId);

@@ -13,12 +13,13 @@ CREATE SEQUENCE tch_seq START WITH 1;
 
 CREATE table teacher (
    id NUMBER(11) NOT NULL,
-   full_name VARCHAR2(45),
-   CONSTRAINT teacher_pk PRIMARY KEY (id)
+   full_name VARCHAR2(45)
 );
 
 ALTER TABLE teacher ADD (
-  CONSTRAINT tch_pk PRIMARY KEY (id));
+  CONSTRAINT teacher_pk PRIMARY KEY (id));
+
+/***********************/
 
 DROP TRIGGER tch_trg
 

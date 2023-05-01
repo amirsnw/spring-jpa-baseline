@@ -17,11 +17,13 @@ CREATE table student (
    age NUMBER(3),
    teacher_id NUMBER(11),
    CONSTRAINT fk_teacher
-    FOREIGN KEY (teacher_id) REFERENCES teacher (id)
+    FOREIGN KEY (teacher_id) REFERENCES TEACHER (id)
 );
 
 ALTER TABLE student ADD (
   CONSTRAINT stu_pk PRIMARY KEY (id));
+
+/***********************/
 
 DROP TRIGGER stu_trg
 

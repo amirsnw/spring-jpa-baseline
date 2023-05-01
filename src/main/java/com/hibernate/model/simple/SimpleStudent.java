@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="student_simple")
-public class Student {
+public class SimpleStudent {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // Auto increment id
@@ -25,11 +25,11 @@ public class Student {
 	@Column(name="email")
 	private String email;
 	
-	public Student() {
+	public SimpleStudent() {
 	}
 
 	// A constructor with all the fields except primary key
-	public Student(String firstName, String lastName, String email) {
+	public SimpleStudent(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;

@@ -21,6 +21,8 @@ CREATE table student_simple (
 ALTER TABLE student_simple ADD (
   CONSTRAINT stu_sim_pk PRIMARY KEY (id));
 
+/***********************/
+
 DROP TRIGGER stu_sim_trg
 
 CREATE OR REPLACE TRIGGER stu_sim_trg

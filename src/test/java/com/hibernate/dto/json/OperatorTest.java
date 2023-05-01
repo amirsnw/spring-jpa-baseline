@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(3)
+@Order(2)
 @DisplayName("Test Operator Methods on Operator Enum Class")
 public class OperatorTest {
 
