@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -69,6 +70,21 @@ public class JdbcTest {
 			DriverManager.getConnection(jdbcUrl, user, pass);
 		} catch (SQLException e) {
 			fail("Unexpected Exception!");
+		}
+	}
+
+	@DisplayName("Test Oracle DB driver")
+	@Test
+	void TestDriver_WhenDriverIsValid_ThenNoExceptionHappens() {
+
+		// Arrange
+		String driver = "oracle.jdbc.OracleDriver";
+
+		// Act & Assert
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e) {
+			fail("Driver Exception!");
 		}
 	}
 }
