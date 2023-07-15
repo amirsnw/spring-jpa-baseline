@@ -35,17 +35,17 @@
         <property name="C3P0_MAX_STATEMENTS">150</property>
         <property name="hibernate.c3p0.initialPoolSize">5</property>
 
-        <mapping class="com.hibernate.model.many.to.many.Product" />
-        <mapping class="com.hibernate.model.many.to.many.Supplier" />
-        <mapping class="com.hibernate.model.one.to.many.bi.Playlist" />
-        <mapping class="com.hibernate.model.one.to.many.bi.User" />
-        <mapping class="com.hibernate.model.one.to.many.uni.Customer" />
-        <mapping class="com.hibernate.model.one.to.many.uni.Order" />
-        <mapping class="com.hibernate.model.one.to.one.bi.Manager" />
-        <mapping class="com.hibernate.model.one.to.one.bi.ManagerInfo" />
-        <mapping class="com.hibernate.model.one.to.one.sharedPK.biPk.Employee" />
-        <mapping class="com.hibernate.model.one.to.one.sharedPK.biPk.EmployeeDetail" />
-        <mapping class="com.hibernate.model.StudentEntity" />
+        <mapping class="com.baseline.model.many.to.many.Product" />
+        <mapping class="com.baseline.model.many.to.many.Supplier" />
+        <mapping class="com.baseline.model.one.to.many.bi.Playlist" />
+        <mapping class="com.baseline.model.one.to.many.bi.User" />
+        <mapping class="com.baseline.model.one.to.many.uni.Customer" />
+        <mapping class="com.baseline.model.one.to.many.uni.Order" />
+        <mapping class="com.baseline.model.one.to.one.bi.Manager" />
+        <mapping class="com.baseline.model.one.to.one.bi.ManagerInfo" />
+        <mapping class="com.baseline.model.one.to.one.sharedPK.biPk.Employee" />
+        <mapping class="com.baseline.model.one.to.one.sharedPK.biPk.EmployeeDetail" />
+        <mapping class="com.baseline.model.StudentEntity" />
 
     </session-factory>
 

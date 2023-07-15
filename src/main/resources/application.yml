@@ -9,7 +9,7 @@ management:
 
 spring:
   application:
-    name: spring-hibernate
+    name: spring-jpa-baseline
   messages:
     basename: i18n/messages
   sql:
