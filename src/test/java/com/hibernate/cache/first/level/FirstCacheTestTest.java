@@ -1,6 +1,6 @@
 package com.hibernate.cache.first.level;
 
-import com.hibernate.model.simple.SimpleStudent;
+import com.hibernate.model.StudentEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -23,7 +23,7 @@ public class FirstCacheTestTest {
         // create session factory
         factory = new Configuration()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(SimpleStudent.class)
+                .addAnnotatedClass(StudentEntity.class)
                 .buildSessionFactory();
     }
 
@@ -56,7 +56,7 @@ public class FirstCacheTestTest {
 
         // Arrange
         // create a student
-        SimpleStudent tempStudent = new SimpleStudent("Tianna", "Bass", "tianna@gmail.com");
+        StudentEntity tempStudent = new StudentEntity("Tianna", "Bass", "tianna@gmail.com");
 
         // Save student and assert that no exception happens
         assertDoesNotThrow(() -> studentId = (int) session.save(tempStudent),
@@ -68,13 +68,13 @@ public class FirstCacheTestTest {
     void testFetchFromFirstLevelCache_ByPreSavedSimpleStudentRecord_ShouldMeetAllAssertions() {
 
         // Arrange
-        SimpleStudent student;
-        SimpleStudent student2;
-        SimpleStudent student3;
+        StudentEntity student;
+        StudentEntity student2;
+        StudentEntity student3;
         Session newSession;
 
         // Act
-        student = session.get(SimpleStudent.class, studentId);
+        student = session.get(StudentEntity.class, studentId);
 
         try {
             Thread.sleep(2000);
@@ -83,13 +83,13 @@ public class FirstCacheTestTest {
         }
 
         // Fetch same data again, check logs that no query fired (show cached values)
-        student2 = session.get(SimpleStudent.class, studentId);
+        student2 = session.get(StudentEntity.class, studentId);
 
         // Create new session
         newSession = factory.openSession();
 
         // Get student with studentId, notice the logs for query (show updated values)
-        student3 = newSession.get(SimpleStudent.class, studentId);
+        student3 = newSession.get(StudentEntity.class, studentId);
 
         // Assert
         assertNotNull(student, "SimpleStudent should be found");
@@ -104,11 +104,11 @@ public class FirstCacheTestTest {
     void testRemoveFromFirstLevelCacheByEvict_ByPreSavedSimpleStudentRecord_ShouldBeRemovedFromCache() {
 
         // Arrange
-        SimpleStudent student;
+        StudentEntity student;
 
         // Act
         // Get student
-        student = session.get(SimpleStudent.class, studentId);
+        student = session.get(StudentEntity.class, studentId);
 
         // evict the student object with studentId
         // Note: The method evict() removes a single object from Session cache
@@ -119,7 +119,7 @@ public class FirstCacheTestTest {
 
         // Console Assertion
         // since object is removed from first level cache, you will see query in logs
-        session.get(SimpleStudent.class, studentId);
+        session.get(StudentEntity.class, studentId);
     }
 
     @Order(4)
@@ -128,11 +128,11 @@ public class FirstCacheTestTest {
     void testRemoveAllFromFirstLevelCacheByClearingCache_ByPreSavedSimpleStudentRecord_ShouldMeetAllAssertions() {
 
         // Arrange
-        SimpleStudent student;
+        StudentEntity student;
 
         // Act
         // Get student
-        student = session.get(SimpleStudent.class, studentId);
+        student = session.get(StudentEntity.class, studentId);
 
         // START: clear example to remove everything from first level cache
         session.clear();
@@ -143,7 +143,7 @@ public class FirstCacheTestTest {
 
         // Console Assertion
         // Shows query in console again
-        session.get(SimpleStudent.class, studentId);
+        session.get(StudentEntity.class, studentId);
     }
 
     @Order(5)
@@ -151,16 +151,16 @@ public class FirstCacheTestTest {
     void deleteSimpleStudent_PredSavedSimpleStudent_ShouldNotThrowException() {
 
         // Arrange
-        SimpleStudent tempStudent;
+        StudentEntity tempStudent;
 
         // Act
-        tempStudent = session.get(SimpleStudent.class, studentId);
+        tempStudent = session.get(StudentEntity.class, studentId);
 
         // Act And Assert
         assertDoesNotThrow(() -> session.delete(tempStudent),
                 () -> "Deleting student with id=" + studentId + " should not throw any exception");
 
-        assertNull(session.get(SimpleStudent.class, studentId), "Should not return any student");
+        assertNull(session.get(StudentEntity.class, studentId), "Should not return any student");
     }
 }
 

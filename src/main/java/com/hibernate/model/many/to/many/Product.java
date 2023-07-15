@@ -1,16 +1,22 @@
 package com.hibernate.model.many.to.many;
 
+import com.hibernate.config.AppConstants;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-import javax.persistence.*;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name="product")
+@Table(name = AppConstants.TABLE_PREFIX + "product")
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "product_sequence")
-	@SequenceGenerator(name = "product_sequence", sequenceName = "prod_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 	
@@ -27,68 +33,10 @@ public class Product {
 			cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			 CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinTable(
-			name="supplier_product",
+			name=AppConstants.TABLE_PREFIX + "supplier_product",
 			joinColumns = @JoinColumn(name="product_id"),
 			inverseJoinColumns = @JoinColumn(name="supplier_id"))
 	private List<Supplier> suppliers;
-
-	public Product() {
-	}
-
-	public Product(String name, String description, String pricePerUnit) {
-		this.name = name;
-		this.description = description;
-		this.pricePerUnit = pricePerUnit;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getPricePerUnit() {
-		return pricePerUnit;
-	}
-
-	public void setPricePerUnit(String pricePerUnit) {
-		this.pricePerUnit = pricePerUnit;
-	}
-
-	public List<Supplier> getSuppliers() {
-		return suppliers;
-	}
-
-	public void setSuppliers(List<Supplier> suppliers) {
-		this.suppliers = suppliers;
-	}
-
-	@Override
-	public String toString() {
-		return "Product [" +
-				"id=" + id +
-				", name=" + name +
-				", description=" + description +
-				", pricePerUnit=" + pricePerUnit + "]";
-	}
 }
 
 
