@@ -1,12 +1,5 @@
-server:
-  address: localhost
-  port: 8080
-  contextPath: /
-
-management:
-  port: 8081
-  contextPath: /manage
-
+application:
+  version: @project.version@
 spring:
   application:
     name: spring-jpa-baseline
@@ -14,12 +7,12 @@ spring:
     basename: i18n/messages
   sql:
     init:
-      mode: always
+      mode: never
       data-locations: data.sql
       separator: ^
   jpa:
     open-in-view: false
-    show-sql: false
+    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
     hibernate:

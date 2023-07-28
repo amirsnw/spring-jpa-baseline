@@ -3,9 +3,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-
     <session-factory>
-
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost:5432/postgres?useUnicode=true
             &amp;characterEncoding=utf8&amp;useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC
@@ -28,6 +26,7 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create-drop</property>
 
+        <!-- Connection Pool -->
         <property name="C3P0_MIN_SIZE">5</property>
         <property name="C3P0_MAX_SIZE">10</property>
         <property name="C3P0_ACQUIRE_INCREMENT">1</property>
@@ -35,18 +34,21 @@
         <property name="C3P0_MAX_STATEMENTS">150</property>
         <property name="hibernate.c3p0.initialPoolSize">5</property>
 
-        <mapping class="com.baseline.model.many.to.many.Product" />
-        <mapping class="com.baseline.model.many.to.many.Supplier" />
-        <mapping class="com.baseline.model.one.to.many.bi.Playlist" />
-        <mapping class="com.baseline.model.one.to.many.bi.User" />
-        <mapping class="com.baseline.model.one.to.many.uni.Customer" />
-        <mapping class="com.baseline.model.one.to.many.uni.Order" />
-        <mapping class="com.baseline.model.one.to.one.bi.Manager" />
-        <mapping class="com.baseline.model.one.to.one.bi.ManagerInfo" />
-        <mapping class="com.baseline.model.one.to.one.sharedPK.biPk.Employee" />
-        <mapping class="com.baseline.model.one.to.one.sharedPK.biPk.EmployeeDetail" />
-        <mapping class="com.baseline.model.StudentEntity" />
-
+        <!-- Registered Entities -->
+        <mapping class="com.baseline.entity.many.to.many.ProductEntity" />
+        <mapping class="com.baseline.entity.many.to.many.SupplierEntity" />
+        <mapping class="com.baseline.entity.one.to.many.bi.PlaylistEntity" />
+        <mapping class="com.baseline.entity.one.to.many.bi.UserEntity" />
+        <mapping class="com.baseline.entity.one.to.many.uni.CustomerEntity" />
+        <mapping class="com.baseline.entity.one.to.many.uni.OrderEntity" />
+        <mapping class="com.baseline.entity.one.to.one.bi.ManagerEntity" />
+        <mapping class="com.baseline.entity.one.to.one.bi.ManagerInfoEntity" />
+        <mapping class="com.baseline.entity.one.to.one.sharedPK.biPk.EmployeeEntity" />
+        <mapping class="com.baseline.entity.one.to.one.sharedPK.biPk.EmployeeDetailEntity" />
+        <mapping class="com.baseline.entity.one.to.one.sharedPK.uniPK.BookEntity" />
+        <mapping class="com.baseline.entity.one.to.one.sharedPK.uniPK.ManuscriptEntity" />
+        <mapping class="com.baseline.entity.one.to.one.uni.AddressEntity" />
+        <mapping class="com.baseline.entity.one.to.one.uni.PersonEntity" />
+        <mapping class="com.baseline.entity.StudentEntity" />
     </session-factory>
-
 </hibernate-configuration>

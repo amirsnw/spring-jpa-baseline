@@ -1,6 +1,6 @@
 package com.baseline.common.dto;
 
-import com.baseline.common.enumeration.OperatorType;
+import com.baseline.config.enumeration.OperatorType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
