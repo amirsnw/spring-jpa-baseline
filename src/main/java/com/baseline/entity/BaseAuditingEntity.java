@@ -21,19 +21,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseAuditingEntity extends BaseEntity {
 
     @CreatedBy
-    @Column(
-            name = "created_by",
-            length = 50,
-            updatable = false
-    )
+    @Column(name = "created_by", length = 50, updatable = false)
     @JsonIgnore
     private String createdBy;
 
     @LastModifiedBy
-    @Column(
-            name = "last_modified_by",
-            length = 50
-    )
+    @Column(name = "last_modified_by", length = 50)
     @JsonIgnore
     private String lastModifiedBy;
 
