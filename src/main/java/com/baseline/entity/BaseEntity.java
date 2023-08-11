@@ -20,30 +20,18 @@ public class BaseEntity implements Serializable, Comparable<BaseEntity> {
 
     @Id
     @GeneratedValue
-    @Column(
-            name = "id",
-            nullable = false,
-            unique = true
-    )
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
     @CreatedDate
-    @Column(
-            name = "created_date",
-            updatable = false
-    )
+    @Column(name = "created_date", updatable = false)
     private Instant createdDate = Instant.now();
 
     @LastModifiedDate
-    @Column(
-            name = "last_modified_date"
-    )
+    @Column(name = "last_modified_date")
     private Instant lastModifiedDate = Instant.now();
 
-    @Column(
-            name = "deleted",
-            nullable = false
-    )
+    @Column(name = "deleted", nullable = false)
     @ColumnDefault("false")
     private boolean deleted = false;
 
@@ -51,6 +39,7 @@ public class BaseEntity implements Serializable, Comparable<BaseEntity> {
         this.id = id;
     }
 
+    @Override
     public int compareTo(BaseEntity o) {
         if (o == null) {
             return -1;

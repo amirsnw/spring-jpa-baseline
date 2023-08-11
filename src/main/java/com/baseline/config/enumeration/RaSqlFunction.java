@@ -6,14 +6,12 @@ public enum RaSqlFunction {
     AVG("avg", Integer.class),
     MAX("max", Integer.class),
     MIN("min", Integer.class),
-    FLOOR("floor", Integer.class),
-    DISTANCE_SPHERE("distanceSphere", Double.class),
-    MAKE_POINT("makePoint", String.class);
+    FLOOR("floor", Integer.class);
 
-    private String name;
-    private Class<?> returnType;
+    private final String name;
+    private final Class<?> returnType;
 
-    private RaSqlFunction(String name, Class returnType) {
+    RaSqlFunction(String name, Class returnType) {
         this.name = name;
         this.returnType = returnType;
     }

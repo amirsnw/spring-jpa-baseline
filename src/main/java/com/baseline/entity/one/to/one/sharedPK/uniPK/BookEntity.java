@@ -15,10 +15,10 @@ public class BookEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="book_id")
+    @Column(name = "book_id")
     private int id;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
     @OneToOne(mappedBy = "book")

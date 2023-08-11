@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @Table(name = AppConstants.TABLE_PREFIX + "team")
 public class AddressEntity {
 
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	@Column(name="street")
-	private String street;
+    @Column(name = "street")
+    private String street;
 
-	@Column(name="number")
-	private String number;
+    @Column(name = "number")
+    private String number;
 }
 
 

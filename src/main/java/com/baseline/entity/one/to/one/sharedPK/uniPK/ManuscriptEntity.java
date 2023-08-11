@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class ManuscriptEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "manuscript_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "manuscript_sequence")
     @SequenceGenerator(name = "manuscript_sequence", sequenceName = "manu_seq", allocationSize = 1)
-    @Column(name="man_id")
+    @Column(name = "man_id")
     private int id;
 
-    @Column(name="water_mark")
+    @Column(name = "water_mark")
     private String waterMark;
 
     @OneToOne

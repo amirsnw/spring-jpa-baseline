@@ -12,20 +12,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = AppConstants.TABLE_PREFIX + "manager_info")
 public class ManagerInfoEntity {
-	
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
-	
-	@Column(name="linkedin_account")
-	private String linkedinAccount;
 
-	// Reference back to Manager
-	@OneToOne(mappedBy="managerInfo",
-			cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-						CascadeType.REFRESH}) // OneToOne default : FetchType.EAGER
-	private ManagerEntity manager;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "linkedin_account")
+    private String linkedinAccount;
+
+    // Reference back to Manager
+    @OneToOne(mappedBy = "managerInfo",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+                    CascadeType.REFRESH}) // OneToOne default : FetchType.EAGER
+    private ManagerEntity manager;
 }
 
 

@@ -6,7 +6,7 @@ public class CustomException extends RuntimeException {
     private List<Object> detail;
 
     public CustomException() {
-       super();
+        super();
     }
 
     public CustomException(String message) {

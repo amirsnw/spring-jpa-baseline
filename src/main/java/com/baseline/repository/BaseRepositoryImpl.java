@@ -14,41 +14,37 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+
+@Slf4j
 public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
-    protected final Logger log = LoggerFactory.getLogger(BaseRepositoryImpl.class);
+
     @PersistenceContext
     protected EntityManager entityManager;
-
-    public BaseRepositoryImpl() {
-    }
 
     public SearchResultModel<Entity> search(Class<Entity> entityClass, SearchDto searchDto) {
         return this.search(entityClass, searchDto, null);
     }
 
     public SearchResultModel<Entity> search(Class<Entity> entityClass, SearchDto searchDto, Set<String> entityGraphList) {
-        SearchResultModel<Entity> searchResult = new SearchResultModel();
+        SearchResultModel<Entity> searchResult = new SearchResultModel<>();
         Long total = -1L;
         if (!searchDto.isSkipCount()) {
             total = this.count(entityClass, searchDto.getFilters());
         }
 
+        // Optimization: first check count
         searchResult.setTotal(total);
         if (!searchDto.isSkipCount() && (total == null || total <= 0L)) {
-            searchResult.setResult(new ArrayList());
+            searchResult.setResult(new ArrayList<>());
         } else {
             CriteriaQuery<Entity> criteria = this.createCriteria(searchDto, entityClass);
             TypedQuery<Entity> query = this.entityManager.createQuery(criteria);
@@ -108,26 +104,13 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
         CriteriaQuery<Number> criteria = builder.createQuery(Number.class);
         Root<Entity> root = criteria.from(entityClass);
         switch (function) {
-            case MAX:
-                criteria.select(builder.max(root.get(field)));
-                break;
-            case MIN:
-                criteria.select(builder.min(root.get(field)));
-                break;
-            case COUNT:
-                criteria.select(builder.count(root.get(field)));
-                break;
-            case AVG:
-                criteria.select(builder.avg(root.get(field)));
-                break;
-            case SUM:
-                criteria.select(builder.sum(root.get(field)));
-                break;
-            case FLOOR:
-                criteria.select(builder.floor(root.get(field)));
-                break;
-            default:
-                throw new CustomException("wrong.sql.function");
+            case MAX -> criteria.select(builder.max(root.get(field)));
+            case MIN -> criteria.select(builder.min(root.get(field)));
+            case COUNT -> criteria.select(builder.count(root.get(field)));
+            case AVG -> criteria.select(builder.avg(root.get(field)));
+            case SUM -> criteria.select(builder.sum(root.get(field)));
+            case FLOOR -> criteria.select(builder.floor(root.get(field)));
+            default -> throw new CustomException("wrong.sql.function");
         }
 
         Predicate predicate = this.createPredicates(builder, root, filters, entityClass);
@@ -175,18 +158,13 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
         return this.entityManager.createQuery(criteria).getResultList();
     }
 
-    protected Class<?> preCreatePredicatePerFilter(Class<?> type, FilterDto filter) {
-        return type;
-    }
-
-    protected Predicate createPredicates(CriteriaBuilder builder, Root<Entity> root, List<FilterDto> filters, Class<Entity> entityClass) {
+    protected Predicate createPredicates(CriteriaBuilder builder, Root<Entity> root,
+                                         List<FilterDto> filters, Class<Entity> entityClass) {
         if (filters != null && !filters.isEmpty()) {
-            List<FilterDto> orFilters = new ArrayList();
-            List<FilterDto> andFilters = new ArrayList();
-            Iterator var7 = filters.iterator();
+            List<FilterDto> orFilters = new ArrayList<>();
+            List<FilterDto> andFilters = new ArrayList<>();
 
-            while(var7.hasNext()) {
-                FilterDto filterDto = (FilterDto)var7.next();
+            for (FilterDto filterDto : filters) {
                 if (filterDto.isOr()) {
                     orFilters.add(filterDto);
                 } else {
@@ -200,23 +178,19 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
                 return null;
             } else if (orPredicates != null && andPredicates != null) {
                 return builder.and(orPredicates, andPredicates);
-            } else if (orPredicates != null) {
-                return orPredicates;
-            } else {
-                return andPredicates;
-            }
+            } else return Objects.requireNonNullElse(orPredicates, andPredicates);
         } else {
             return null;
         }
     }
 
-    protected Predicate createPredicate(CriteriaBuilder builder, Root<Entity> root, List<FilterDto> filters, Class<Entity> entityClass, boolean isOr) {
+    protected Predicate createPredicate(CriteriaBuilder builder, Root<Entity> root,
+                                        List<FilterDto> filters, Class<Entity> entityClass,
+                                        boolean isOr) {
         if (filters != null && !filters.isEmpty()) {
             Predicate result = null;
-            Iterator var7 = filters.iterator();
 
-            while(var7.hasNext()) {
-                FilterDto filter = (FilterDto)var7.next();
+            for (FilterDto filter : filters) {
                 String field = filter.getField();
                 boolean isFunction = false;
 
@@ -228,23 +202,22 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
                     } else {
                         type = this.getClassType(field, entityClass);
                     }
-                } catch (Exception var22) {
+                } catch (Exception e) {
                     throw new CustomException("wrong.field.name.or.function");
                 }
 
-                type = this.preCreatePredicatePerFilter(type, filter);
+
                 Comparable value = null;
                 List<Comparable> values = null;
-                String[] expressionFilters;
-                if (!filter.getOperator().equals(OperatorType.IN) && !filter.getOperator().equals(OperatorType.NOT_IN) && !filter.getOperator().equals(OperatorType.BETWEEN)) {
+                if (!filter.getOperator().equals(OperatorType.IN)
+                        && !filter.getOperator().equals(OperatorType.NOT_IN)
+                        && !filter.getOperator().equals(OperatorType.BETWEEN)) {
                     value = this.toObject(type, filter.getValue());
                 } else {
-                    expressionFilters = filter.getValue().split(",");
-                    values = new ArrayList(expressionFilters.length);
-                    String[] var16 = expressionFilters;
+                    String[] expressionFilters = filter.getValue().split(",");
+                    values = new ArrayList<>(expressionFilters.length);
 
-                    for(int i = 0; i < expressionFilters.length; ++i) {
-                        String rawValue = var16[i];
+                    for (String rawValue : expressionFilters) {
                         Comparable object = this.toObject(type, rawValue);
                         if (object != null) {
                             values.add(object);
@@ -252,11 +225,11 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
                     }
                 }
 
-                Object expression;
+                Expression expression;
                 if (isFunction) {
                     try {
                         expression = this.getFunctionExpression(filter.getField(), builder, root);
-                    } catch (Exception var21) {
+                    } catch (Exception e) {
                         throw new CustomException("cannot.parse.function");
                     }
                 } else {
@@ -265,65 +238,43 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
 
                 Predicate predicate;
                 switch (filter.getOperator()) {
-                    case EQ:
-                        predicate = builder.equal((Expression)expression, value);
-                        break;
-                    case GE:
-                        predicate = builder.greaterThanOrEqualTo((Expression)expression, value);
-                        break;
-                    case GT:
-                        predicate = builder.greaterThan((Expression)expression, value);
-                        break;
-                    case LE:
-                        predicate = builder.lessThanOrEqualTo((Expression)expression, value);
-                        break;
-                    case ILIKE:
+                    case EQ -> predicate = builder.equal(expression, value);
+                    case GE -> predicate = builder.greaterThanOrEqualTo(expression, value);
+                    case GT -> predicate = builder.greaterThan(expression, value);
+                    case LE -> predicate = builder.lessThanOrEqualTo(expression, value);
+                    case ILIKE -> {
                         if (value == null) {
                             throw new CustomException("filter.value.can.not.be.null");
                         }
-
-                        predicate = builder.like(((Expression)expression).as(String.class), "%" + (String)value + "%");
-                        break;
-                    case BETWEEN:
+                        predicate = builder.like(expression.as(String.class), "%" + (String) value + "%");
+                    }
+                    case BETWEEN -> {
                         try {
                             if (values != null && values.size() == 2) {
-                                predicate = builder.between((Expression)expression, (Comparable)values.get(0), (Comparable)values.get(1));
+                                predicate = builder.between(expression, values.get(0), values.get(1));
                                 break;
                             }
 
                             throw new CustomException("enter.two.value.for.between");
-                        } catch (Exception var23) {
+                        } catch (Exception e) {
                             throw new CustomException("Illegal.between.value");
                         }
-                    case LIKE:
+                    }
+                    case LIKE -> {
                         if (value == null) {
                             throw new CustomException("filter.value.can.not.be.null");
                         }
-
-                        Expression var10001 = builder.lower(((Expression)expression).as(String.class));
-                        String var10002 = ((String)value).toLowerCase();
-                        predicate = builder.like(var10001, "%" + var10002.replace(' ', '%') + "%");
-                        break;
-                    case LT:
-                        predicate = builder.lessThan((Expression)expression, value);
-                        break;
-                    case NE:
-                        predicate = builder.notEqual((Expression)expression, value);
-                        break;
-                    case IS_NULL:
-                        predicate = builder.isNull((Expression)expression);
-                        break;
-                    case IS_NOT_NULL:
-                        predicate = builder.isNotNull((Expression)expression);
-                        break;
-                    case IN:
-                        predicate = ((Expression)expression).in(values);
-                        break;
-                    case NOT_IN:
-                        predicate = builder.not(((Expression)expression).in(values));
-                        break;
-                    default:
-                        throw new CustomException("Illegal.Operator");
+                        Expression exp = builder.lower(expression.as(String.class));
+                        String v = ((String) value).toLowerCase();
+                        predicate = builder.like(exp, "%" + v.replace(' ', '%') + "%");
+                    }
+                    case LT -> predicate = builder.lessThan(expression, value);
+                    case NE -> predicate = builder.notEqual(expression, value);
+                    case IS_NULL -> predicate = builder.isNull(expression);
+                    case IS_NOT_NULL -> predicate = builder.isNotNull(expression);
+                    case IN -> predicate = (expression).in(values);
+                    case NOT_IN -> predicate = builder.not((expression).in(values));
+                    default -> throw new CustomException("Illegal.Operator");
                 }
 
                 if (result == null) {
@@ -343,17 +294,15 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
 
     private Expression getFunctionExpression(String field, CriteriaBuilder cb, Root<Entity> root) {
         RaSqlFunction function = this.getFunction(field);
-        return cb.function(function.getName(), function.getReturnType(), this.getArgumentExpression(this.getArguments(field), cb, root));
+        return cb.function(function.getName(), function.getReturnType(),
+                this.getArgumentExpression(this.getArguments(field), cb, root));
     }
 
     private Expression[] getArgumentExpression(String[] arguments, CriteriaBuilder cb, Root<Entity> root) {
-        List<Expression> expressions = new ArrayList();
+        List<Expression> expressions = new ArrayList<>();
         if (arguments != null) {
-            String[] var5 = arguments;
-            int var6 = arguments.length;
 
-            for(int var7 = 0; var7 < var6; ++var7) {
-                String argument = var5[var7];
+            for (String argument : arguments) {
                 argument = argument.trim();
                 if (argument.contains("(")) {
                     expressions.add(this.getFunctionExpression(argument, cb, root));
@@ -372,14 +321,14 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
         }
 
         Expression[] expressionArray = new Expression[expressions.size()];
-        return (Expression[])expressions.toArray(expressionArray);
+        return expressions.toArray(expressionArray);
     }
 
     private boolean isNumber(String argument) {
         boolean numeric = true;
 
         try {
-            Double var3 = Double.parseDouble(argument);
+            Double.parseDouble(argument);
         } catch (NumberFormatException var4) {
             numeric = false;
         }
@@ -390,9 +339,9 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
     public String[] getArguments(String function) {
         String substring = function.substring(function.indexOf("(") + 1, function.lastIndexOf(")"));
         String[] arguments = substring.split(",");
-        List<String> actualArguments = new ArrayList();
+        List<String> actualArguments = new ArrayList<>();
 
-        for(int i = 0; i < arguments.length; ++i) {
+        for (int i = 0; i < arguments.length; ++i) {
             String argument = arguments[i];
             if (!argument.contains("(")) {
                 actualArguments.add(argument);
@@ -400,7 +349,7 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
                 StringBuilder functionArgument = new StringBuilder();
                 functionArgument.append(argument).append(",");
 
-                for(int j = i + 1; j < arguments.length; ++j) {
+                for (int j = i + 1; j < arguments.length; ++j) {
                     String innerArgument = arguments[j];
                     if (innerArgument.contains(")")) {
                         functionArgument.append(innerArgument);
@@ -415,22 +364,20 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
             }
         }
 
-        return (String[])actualArguments.toArray(new String[0]);
+        return actualArguments.toArray(new String[0]);
     }
 
     private RaSqlFunction getFunction(String field) {
         int indexOfParentheses = field.indexOf("(");
         String functionName = field.substring(0, indexOfParentheses).trim();
-        RaSqlFunction[] var4 = RaSqlFunction.values();
-        int var5 = var4.length;
+        RaSqlFunction[] functions = RaSqlFunction.values();
 
-        for(int var6 = 0; var6 < var5; ++var6) {
-            RaSqlFunction value = var4[var6];
+        for (int i = 0; i < functions.length; ++i) {
+            RaSqlFunction value = functions[i];
             if (value.getName().equals(functionName)) {
                 return value;
             }
         }
-
         throw new IllegalArgumentException();
     }
 
@@ -440,38 +387,37 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
             String[] split = field.split("\\.");
             expression = root.join(split[0]);
 
-            for(int i = 1; i < split.length; ++i) {
-                expression = ((Path)expression).get(split[i]);
+            for (int i = 1; i < split.length; ++i) {
+                expression = ((Path) expression).get(split[i]);
             }
         } else {
             expression = root.get(field);
         }
 
-        return (Path)expression;
+        return (Path) expression;
     }
 
     private Class<?> getClassType(String fieldName, Class<Entity> entityClass) {
         Class<?> oldType = entityClass;
         Class<?> currentType = entityClass;
         String[] entityNames = fieldName.split("\\.");
-        int var7 = entityNames.length;
 
-        for(int i = 0; i < var7; ++i) {
+        for (int i = 0; i < entityNames.length; ++i) {
             String entityName = entityNames[i];
             Field field = ReflectionUtils.findField(oldType, entityName);
             if (field == null) {
-                throw new CustomException("can.not.found.filed.type");
+                throw new CustomException("can.not.find.filed.type");
             }
 
             currentType = field.getType();
             if (currentType == List.class || currentType == Set.class) {
                 Type temp = field.getGenericType();
-                String className = temp.getTypeName().split("<")[1].substring(0, temp.getTypeName().split("<")[1].length() - 1);
-
+                // String className = temp.getTypeName().split("<")[1].substring(0, temp.getTypeName().split("<")[1].length() - 1);
+                String className = temp.getTypeName().substring(1, temp.getTypeName().length() - 1);
                 try {
                     currentType = Class.forName(className);
-                } catch (ClassNotFoundException var14) {
-                    var14.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -482,61 +428,58 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
     }
 
     private Comparable toObject(Class clazz, String value) {
-        try {
-            if (value != null && value.length() != 0) {
-                if (Boolean.class != clazz && !clazz.getName().equals("boolean")) {
-                    if (Byte.class != clazz && !clazz.getName().equals("byte")) {
-                        if (Short.class != clazz && !clazz.getName().equals("short")) {
-                            if (Integer.class != clazz && !clazz.getName().equals("int")) {
-                                if (Long.class != clazz && !clazz.getName().equals("long")) {
-                                    if (Float.class != clazz && !clazz.getName().equals("float")) {
-                                        if (Double.class != clazz && !clazz.getName().equals("double")) {
-                                            if (clazz.isEnum()) {
-                                                return Enum.valueOf(clazz, value);
-                                            } else if (Instant.class == clazz) {
-                                                Long epochSecond = Long.valueOf(value);
-                                                return Instant.ofEpochSecond(epochSecond > 9999999999L ? epochSecond / 1000L : epochSecond);
-                                            } else {
-                                                if (BaseEntity.class == clazz.getAnnotatedSuperclass().getType()) {
-                                                    try {
-                                                        return this.toObjectId(clazz, Long.valueOf(value));
-                                                    } catch (IllegalAccessException | InstantiationException var4) {
-                                                        this.log.error("error.convert.id.to.object", var4);
-                                                    }
-                                                }
-
-                                                return value;
-                                            }
-                                        } else {
-                                            return Double.parseDouble(value);
-                                        }
-                                    } else {
-                                        return Float.parseFloat(value);
-                                    }
-                                } else {
-                                    return Long.parseLong(value);
-                                }
-                            } else {
-                                return Integer.parseInt(value);
-                            }
-                        } else {
-                            return Short.parseShort(value);
-                        }
-                    } else {
+        if (value != null && value.length() != 0) {
+            try {
+                switch (clazz.getName()) {
+                    case "java.lang.Boolean", "boolean" -> {
+                        return Boolean.parseBoolean(value);
+                    }
+                    case "java.lang.Byte", "byte" -> {
                         return Byte.parseByte(value);
                     }
-                } else {
-                    return Boolean.parseBoolean(value);
+                    case "java.lang.Short", "short" -> {
+                        return Short.parseShort(value);
+                    }
+                    case "java.lang.Integer", "int" -> {
+                        return Integer.parseInt(value);
+                    }
+                    case "java.lang.Long", "long" -> {
+                        return Long.parseLong(value);
+                    }
+                    case "java.lang.Float", "float" -> {
+                        return Float.parseFloat(value);
+                    }
+                    case "java.lang.Double", "double" -> {
+                        return Double.parseDouble(value);
+                    }
+                    default -> {
+                        if (clazz.isEnum()) {
+                            return Enum.valueOf(clazz, value);
+                        } else if (clazz == Instant.class) {
+                            Long epochSecond = Long.valueOf(value);
+                            return Instant.ofEpochSecond(epochSecond > 9999999999L ? epochSecond / 1000L : epochSecond);
+                        } else {
+                            if (clazz.getAnnotatedSuperclass().getType() == BaseEntity.class) {
+                                try {
+                                    return this.toObjectId(clazz, Long.valueOf(value));
+                                } catch (IllegalAccessException | InstantiationException var4) {
+                                    this.log.error("error.convert.id.to.object", var4);
+                                }
+                            }
+                            return value;
+                        }
+                    }
                 }
-            } else {
-                return value;
+            } catch (Exception e) {
+                throw new CustomException("error in value convertion '" + value + "' to " + clazz.getName());
             }
-        } catch (Exception var5) {
-            throw new CustomException("error in convert value '" + value + "' to " + clazz.getName());
+        } else {
+            return value;
         }
     }
 
-    protected Comparable<BaseEntity> toObjectId(Class<BaseEntity> clazz, Long value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    protected Comparable<BaseEntity> toObjectId(Class<BaseEntity> clazz, Long value)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         BaseEntity entity = clazz.getDeclaredConstructor().newInstance();
         entity.setId(value);
         return entity;
@@ -556,8 +499,8 @@ public class BaseRepositoryImpl<Entity> implements BaseRepository<Entity> {
             List<Order> orders = new ArrayList();
             Iterator iter = searchDTO.getOrderBy().iterator();
 
-            while(iter.hasNext()) {
-                OrderByDto orderByDTO = (OrderByDto)iter.next();
+            while (iter.hasNext()) {
+                OrderByDto orderByDTO = (OrderByDto) iter.next();
                 orders.add(orderByDTO.isAsc() ?
                         builder.asc(this.getExpression(orderByDTO.getName(), root))
                         : builder.desc(this.getExpression(orderByDTO.getName(), root)));

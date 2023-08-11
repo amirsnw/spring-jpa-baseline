@@ -71,7 +71,7 @@ public abstract class BaseService<Entity
         });
         Iterator iter = entities.iterator();
 
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Entity entity = (Entity) iter.next();
             this.save(entity);
         }
@@ -128,14 +128,14 @@ public abstract class BaseService<Entity
     protected void renameUniqueField(Entity entity) {
         Field[] declaredFields = entity.getClass().getDeclaredFields();
 
-        for(int i = 0; i < declaredFields.length; ++i) {
+        for (int i = 0; i < declaredFields.length; ++i) {
             Field field = declaredFields[i];
             if (field.isAnnotationPresent(Column.class)) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation.unique()) {
                     try {
                         field.setAccessible(true);
-                        String oldName = (String)field.get(entity);
+                        String oldName = (String) field.get(entity);
                         StringBuilder newName = new StringBuilder();
                         newName.append("<DEL>").append(oldName);
                         int maxLength = columnAnnotation.length();
@@ -206,7 +206,7 @@ public abstract class BaseService<Entity
     public SearchResultModel<Entity> searchDeleted(SearchDto searchDTO) {
         this.preFilter(searchDTO.getFilters(), PreFilterType.SEARCH_DELETED);
         this.preSearch(searchDTO, true);
-        SearchResultModel<Entity> entityResult = ((BaseRepository)this.repository).search(this.getEntityClass(), searchDTO);
+        SearchResultModel<Entity> entityResult = ((BaseRepository) this.repository).search(this.getEntityClass(), searchDTO);
         this.postSearch(entityResult, searchDTO, true);
         return entityResult;
     }

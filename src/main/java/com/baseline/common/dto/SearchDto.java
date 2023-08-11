@@ -19,7 +19,7 @@ public class SearchDto {
 
     public SearchDto() {
         this.filters = new ArrayList();
-        this.page = 1;
+        this.page = 0;
         this.size = 10;
         this.orderBy = null;
         this.skipCount = false;

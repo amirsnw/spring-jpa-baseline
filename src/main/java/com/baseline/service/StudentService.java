@@ -16,12 +16,12 @@ public class StudentService extends BaseService<StudentEntity, StudentRepository
     }
 
     @Override
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public StudentEntity save(StudentEntity entity) {
         return repository.save(entity);
     }
 
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public StudentEntity saveWithREQUIRED(StudentEntity entity) {
         StudentEntity student = save(entity);
         try {
@@ -32,12 +32,12 @@ public class StudentService extends BaseService<StudentEntity, StudentRepository
         return student;
     }
 
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public StudentEntity callREQUIRED() {
         throw new CustomException("Rollback this transaction!");
     }
 
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public StudentEntity saveWithREQUIRES_NEW(StudentEntity entity) {
         StudentEntity student = save(entity);
         try {
@@ -48,7 +48,7 @@ public class StudentService extends BaseService<StudentEntity, StudentRepository
         return student;
     }
 
-    @Transactional(propagation=Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public StudentEntity callREQUIRES_NEW() {
         throw new CustomException("Rollback this transaction!");
     }

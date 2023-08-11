@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
 @Table(name = AppConstants.TABLE_PREFIX + "student")
 public class StudentEntity extends BaseAuditingEntity {
 
-	@Column(name="first_name")
-	private String firstName;
-	
-	@Column(name="last_name")
-	private String lastName;
-	
-	@Column(name="email")
-	private String email;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email")
+    private String email;
 
 }
 

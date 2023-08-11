@@ -1,4 +1,4 @@
-package com.baseline.cache;
+package com.baseline.hibernateCache;
 
 import com.baseline.entity.StudentEntity;
 import org.hibernate.Session;
@@ -99,7 +99,7 @@ public class FirstLevelCacheTest {
 
     @Order(3)
     @Test
-    // evict example to remove specific object from hibernate first level cache
+        // evict example to remove specific object from hibernate first level cache
     void testRemoveFromFirstLevelCacheByEvict_ByPreSavedSimpleStudentRecord_ShouldBeRemovedFromCache() {
 
         // Arrange

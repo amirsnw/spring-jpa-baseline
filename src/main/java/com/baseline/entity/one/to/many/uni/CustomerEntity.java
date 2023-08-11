@@ -16,15 +16,15 @@ import java.util.Set;
 @Table(name = AppConstants.TABLE_PREFIX + "customer")
 public class CustomerEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@Column(name = "name")
-	private String name;
+    @Column(name = "name")
+    private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "customer_id")
-	private Set<OrderEntity> orders = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private Set<OrderEntity> orders = new HashSet<>();
 }

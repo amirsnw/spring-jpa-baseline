@@ -133,11 +133,7 @@ public class FilterDto {
             StringBuilder sb = new StringBuilder();
             sb.append(value1).append(',').append(value2).append(',');
             if (values != null) {
-                String[] var6 = values;
-                int var7 = values.length;
-
-                for(int var8 = 0; var8 < var7; ++var8) {
-                    String value = var6[var8];
+                for (String value : values) {
                     sb.append(value).append(',');
                 }
             }
@@ -152,13 +148,13 @@ public class FilterDto {
         }
 
         public SearchDto isNull() {
-            FilterDto filterDto = new FilterDto(this.field, OperatorType.IS_NULL, (String)null, this.or);
+            FilterDto filterDto = new FilterDto(this.field, OperatorType.IS_NULL, null, this.or);
             this.searchDto.addFilter(filterDto);
             return this.searchDto;
         }
 
         public SearchDto isNotNull() {
-            FilterDto filterDto = new FilterDto(this.field, OperatorType.IS_NOT_NULL, (String)null, this.or);
+            FilterDto filterDto = new FilterDto(this.field, OperatorType.IS_NOT_NULL, null, this.or);
             this.searchDto.addFilter(filterDto);
             return this.searchDto;
         }
@@ -167,10 +163,6 @@ public class FilterDto {
             FilterDto filterDto = new FilterDto(this.field, OperatorType.PATTERN, value, this.or);
             this.searchDto.addFilter(filterDto);
             return this.searchDto;
-        }
-
-        public String toString() {
-            return "FilterDto.FilterDtoBuilder(field=" + this.field + ", or=" + this.or + ")";
         }
     }
 }
